@@ -1,0 +1,21 @@
+name: Rollback Tag
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag para remover"
+        required: true
+
+jobs:
+  delete-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete tag
+        run: |
+          git config --global user.name github-actions
+          git config --global user.email github-actions@github.com
+
+          git clone https://github.com/${{ github.repository }} repo
+          cd repo
+          git push origin :refs/tags/${{ github.event.inputs.tag }}
