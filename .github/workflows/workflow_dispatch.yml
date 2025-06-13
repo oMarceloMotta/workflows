@@ -1,5 +1,6 @@
 name: Tag and Post-Release Action
-
+permissions:
+  contents: write
 on:
   push:
     branches:
