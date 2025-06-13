@@ -11,11 +11,11 @@ jobs:
   delete-tag:
     runs-on: ubuntu-latest
     steps:
-      - name: Delete tag
+      - name: Configurar Git e deletar tag remota
         run: |
-          git config --global user.name github-actions
-          git config --global user.email github-actions@github.com
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
           git clone https://github.com/${{ github.repository }} repo
           cd repo
-          git push origin :refs/tags/${{ github.event.inputs.tag }}
+          git push origin --delete refs/tags/${{ github.event.inputs.tag }}
