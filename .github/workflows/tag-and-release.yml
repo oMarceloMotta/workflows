@@ -6,6 +6,9 @@ on:
       tag:
         description: "Tag para remover"
         required: true
+      tag_to_checkout:
+        description: "Tag para checkout/rollback"
+        required: true
 
 jobs:
   delete-tag:
