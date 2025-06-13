@@ -7,14 +7,14 @@ on:
         description: "Tag para remover"
         required: true
       tag_to_checkout:
-        description: "Tag para checkout/rollback"
+        description: "Tag para voltar a main (ex: v1.0.0)"
         required: true
 
 jobs:
-  delete-tag:
+  rollback:
     runs-on: ubuntu-latest
     steps:
-      - name: Configurar Git, deletar tag remota e fazer checkout de tag antiga
+      - name: Configurar Git, preparar rollback da main
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@users.noreply.github.com"
@@ -22,14 +22,17 @@ jobs:
           git clone https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} repo
           cd repo
 
-          # Deleta tag remota
+          # (Opcional) Deleta a tag remota
           # git push origin --delete refs/tags/${{ github.event.inputs.tag_to_delete }}
 
-          # Faz checkout da tag antiga para rollback
-          git checkout tags/${{ github.event.inputs.tag_to_checkout }}
+          # Cria uma branch com o estado atual da main, para backup
+          git checkout main
+          git checkout -b rollback-${{ github.event.inputs.tag_to_delete }}
+          git push origin rollback-${{ github.event.inputs.tag_to_delete }}
 
-          # Cria branch rollback a partir da tag antiga
-          git checkout -b rollback-${{ github.event.inputs.tag_to_checkout }}
+          # Reseta main para o commit da tag antiga
+          git checkout main
+          git reset --hard ${{ github.event.inputs.tag_to_checkout }}
+          git push origin main --force
 
-          # Opcional: push da branch rollback (se quiser que ela fique no remoto)
-          git push origin rollback-${{ github.event.inputs.tag_to_checkout }}
+          echo 'Publicando ...'
