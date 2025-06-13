@@ -1,6 +1,6 @@
 {
   "name": "work",
-  "version": "2.0.9",
+  "version": "2.0.10",
   "main": "index.js",
   "scripts": {
     "test": "echo \"A Error: no realise  teste \" && exit 1"
