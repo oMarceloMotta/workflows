@@ -11,11 +11,22 @@ jobs:
   delete-tag:
     runs-on: ubuntu-latest
     steps:
-      - name: Configurar Git e deletar tag remota
+      - name: Configurar Git, deletar tag remota e fazer checkout de tag antiga
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@users.noreply.github.com"
 
           git clone https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} repo
           cd repo
-          git push origin --delete refs/tags/${{ github.event.inputs.tag }}
+
+          # Deleta tag remota
+          git push origin --delete refs/tags/${{ github.event.inputs.tag_to_delete }}
+
+          # Faz checkout da tag antiga para rollback
+          git checkout tags/${{ github.event.inputs.tag_to_checkout }}
+
+          # Cria branch rollback a partir da tag antiga
+          git checkout -b rollback-${{ github.event.inputs.tag_to_checkout }}
+
+          # Opcional: push da branch rollback (se quiser que ela fique no remoto)
+          git push origin rollback-${{ github.event.inputs.tag_to_checkout }}
