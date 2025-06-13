@@ -1,9 +1,9 @@
 {
   "name": "work",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no realize teste \" && exit 1"
+    "test": "echo \"A Error: no realize teste \" && exit 1"
   },
   "repository": {
     "type": "git",
