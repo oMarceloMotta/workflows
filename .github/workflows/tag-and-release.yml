@@ -4,10 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: "Tag para remover"
-        required: true
-      tag_to_checkout:
-        description: "Tag para checkout/rollback"
+        description: "Tag para remover e fazer rollback"
         required: true
 
 jobs:
@@ -22,14 +19,7 @@ jobs:
           git clone https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }} repo
           cd repo
 
-          # Deleta tag remota
-          git push origin --delete refs/tags/${{ github.event.inputs.tag_to_delete }}
-
-          # Faz checkout da tag antiga para rollback
-          git checkout tags/${{ github.event.inputs.tag_to_checkout }}
-
-          # Cria branch rollback a partir da tag antiga
-          git checkout -b rollback-${{ github.event.inputs.tag_to_checkout }}
-
-          # Opcional: push da branch rollback (se quiser que ela fique no remoto)
-          git push origin rollback-${{ github.event.inputs.tag_to_checkout }}
+          git push origin --delete refs/tags/${{ github.event.inputs.tag }}
+          git checkout tags/${{ github.event.inputs.tag }}
+          git checkout -b rollback-${{ github.event.inputs.tag }}
+          git push origin rollback-${{ github.event.inputs.tag }}
