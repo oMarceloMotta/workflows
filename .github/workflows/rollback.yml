@@ -3,9 +3,6 @@ name: Rollback Tag
 on:
   workflow_dispatch:
     inputs:
-      tag_to_delete:
-        description: "Tag para remover"
-        required: true
       tag_to_checkout:
         description: "Tag para voltar a main (ex: v1.0.0)"
         required: true
